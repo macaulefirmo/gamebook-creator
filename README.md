@@ -1,29 +1,25 @@
 # gamebook-creator
 
-## Project setup
+## Requirements
+
+```
+nodejs v16.x
+```
+
+## Project Setup
 
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and Hot-reloads for Development
 
 ```
-npm run serve
+npm run electron:serve
 ```
 
-### Compiles and minifies for production
+### Compiles and Minifies for Production
 
 ```
-npm run build
+npm run electron:build
 ```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
