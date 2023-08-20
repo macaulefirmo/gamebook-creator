@@ -19,7 +19,28 @@
         permanent
     >
         <v-list density="compact" nav v-for="item in items">
+            <v-list-group
+                v-if="item.subItems && item.subItems.length != 0"
+                :fluid="rail"
+            >
+                <template v-slot:activator="{ props }">
+                    <v-list-item
+                        v-bind="props"
+                        :prepend-icon="item.icon"
+                        :title="item.title"
+                    ></v-list-item>
+                </template>
+
+                <v-list-item
+                    v-for="subItem in item.subItems"
+                    :prepend-icon="subItem.icon"
+                    :title="subItem.title"
+                    :value="subItem.value"
+                ></v-list-item>
+            </v-list-group>
+
             <v-list-item
+                v-else
                 :prepend-icon="item.icon"
                 :title="item.title"
                 :value="item.value"
@@ -39,22 +60,39 @@ export default {
     props: ['title'],
     data: () => ({
         drawer: true,
-        rail: true,
+        rail: false,
         items: [
             {
                 icon: 'mdi-home-city',
-                title: 'Home',
+                title: 'Início',
                 value: 'home',
             },
             {
-                icon: 'mdi-account',
-                title: 'My Account',
-                value: 'account',
+                icon: 'mdi-pencil-ruler',
+                title: 'Projeto',
+                value: 'project',
+                subItems: [
+                    {
+                        icon: 'mdi-plus-outline',
+                        title: 'Criar',
+                        value: 'project/create',
+                    },
+                    {
+                        icon: 'mdi-view-list',
+                        title: 'Listar',
+                        value: 'project/list',
+                    },
+                ],
             },
             {
-                icon: 'mdi-account-group-outline',
-                title: 'Users',
-                value: 'users',
+                icon: 'mdi-information-outline',
+                title: 'Sobre',
+                value: 'info',
+            },
+            {
+                icon: 'mdi-help-circle-outline',
+                title: 'Ajuda',
+                value: 'help',
             },
         ],
     }),

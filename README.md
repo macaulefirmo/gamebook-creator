@@ -23,3 +23,13 @@ npm run electron:serve
 ```
 npm run electron:build
 ```
+
+## References
+
+### Vuetify
+
+[Vuetify](https://vuetifyjs.com/en/)
+
+### Icons
+
+[MDI](https://pictogrammers.com/library/mdi/)
