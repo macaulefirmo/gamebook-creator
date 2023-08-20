@@ -1,6 +1,6 @@
 <template>
-    <Main title="Início">
-        <v-row> Home </v-row>
+    <Main title="Projetos">
+        <v-row> List Project </v-row>
     </Main>
 </template>
 
@@ -8,7 +8,7 @@
 import Main from '@/components/Main.vue';
 
 export default {
-    name: 'Home',
+    name: 'ListProject',
     components: {
         Main,
     },
