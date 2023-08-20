@@ -1,12 +1,17 @@
 <template>
-    <v-container>
-        <v-row class="text-center"> Home </v-row>
-    </v-container>
+    <Main title="Home">
+        <v-row> Home </v-row>
+    </Main>
 </template>
 
 <script>
+import Main from '@/components/Main.vue';
+
 export default {
     name: 'Home',
+    components: {
+        Main,
+    },
     data: () => ({}),
 };
 </script>
