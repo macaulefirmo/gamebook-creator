@@ -15,7 +15,7 @@
                         color="blue-darken-4"
                         variant="outlined"
                         prepend-icon="mdi-plus"
-                        @click="teste()"
+                        @click="$router.push('/project/create')"
                     >
                         Novo Projeto
                     </v-btn>
