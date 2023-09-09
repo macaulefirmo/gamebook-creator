@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useMainStore } from '@/store';
+
 import Home from '../views/Home.vue';
 import CreateProject from '../views/CreateProject.vue';
 import ListProject from '../views/ListProject.vue';
@@ -42,6 +44,11 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
+});
+
+router.afterEach((to, from, failure) => {
+    const mainStore = useMainStore();
+    mainStore.updateActiveItem(to.name);
 });
 
 export default router;

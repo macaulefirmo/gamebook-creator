@@ -2,7 +2,7 @@
     <v-app-bar color="light-blue-darken-1" prominent>
         <v-app-bar-nav-icon
             variant="text"
-            @click.stop="rail = !rail"
+            @click.stop="store.rail = !store.rail"
         ></v-app-bar-nav-icon>
 
         <v-toolbar-title>{{ title }}</v-toolbar-title>
@@ -12,16 +12,18 @@
         <v-btn variant="text" icon="mdi-dots-vertical"></v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer
-        v-model="drawer"
-        location="left"
-        :rail="rail"
-        permanent
-    >
-        <v-list density="compact" nav v-for="item in items">
+    <v-navigation-drawer location="left" :rail="store.rail" permanent>
+        <v-list
+            nav
+            density="compact"
+            v-for="item in store.items"
+            v-model:opened="store.opened"
+            active-color="light-blue-darken-1"
+        >
             <v-list-group
                 v-if="item.subItems && item.subItems.length != 0"
-                :fluid="rail"
+                :fluid="store.rail"
+                value="Project"
             >
                 <template v-slot:activator="{ props }">
                     <v-list-item
@@ -33,72 +35,46 @@
 
                 <router-link
                     class="router-link"
-                    :to="subItem.value"
+                    :to="subItem.path"
                     v-for="subItem in item.subItems"
                 >
                     <v-list-item
                         :prepend-icon="subItem.icon"
                         :title="subItem.title"
+                        :active="subItem.isActive"
                     ></v-list-item>
                 </router-link>
             </v-list-group>
 
-            <router-link class="router-link" :to="item.value" v-else>
+            <router-link class="router-link" :to="item.path" v-else>
                 <v-list-item
                     :prepend-icon="item.icon"
                     :title="item.title"
+                    :active="item.isActive"
                 ></v-list-item>
             </router-link>
         </v-list>
     </v-navigation-drawer>
 
-    <div class="main-content">
-        <v-container fluid>
+    <div class="main-content h-100">
+        <v-container class="h-100" fluid>
             <slot></slot>
         </v-container>
     </div>
 </template>
 
 <script>
+import { useMainStore } from '@/store';
+
 export default {
     props: ['title'],
-    data: () => ({
-        drawer: true,
-        rail: false,
-        items: [
-            {
-                icon: 'mdi-home-city',
-                title: 'Início',
-                value: '/',
-            },
-            {
-                icon: 'mdi-pencil-ruler',
-                title: 'Projeto',
-                subItems: [
-                    {
-                        icon: 'mdi-plus-outline',
-                        title: 'Criar',
-                        value: '/project/create',
-                    },
-                    {
-                        icon: 'mdi-view-list',
-                        title: 'Listar',
-                        value: '/project/list',
-                    },
-                ],
-            },
-            {
-                icon: 'mdi-information-outline',
-                title: 'Sobre',
-                value: '/about',
-            },
-            {
-                icon: 'mdi-help-circle-outline',
-                title: 'Ajuda',
-                value: '/help',
-            },
-        ],
-    }),
+    setup() {
+        const store = useMainStore();
+
+        return {
+            store,
+        };
+    },
 };
 </script>
 
