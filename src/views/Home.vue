@@ -7,9 +7,10 @@
                         :src="
                             require('@/assets/images/undraw_books_re_8gea.svg')
                         "
+                        class="img-fluid"
                     />
                 </div>
-                <div class="mt-5">
+                <div class="mt-10">
                     <v-btn
                         color="blue-darken-4"
                         variant="outlined"
@@ -40,3 +41,9 @@ export default {
     },
 };
 </script>
+
+<style>
+.img-fluid {
+    max-width: 100%;
+}
+</style>
