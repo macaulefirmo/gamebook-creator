@@ -18,7 +18,6 @@
             density="compact"
             v-for="item in store.items"
             v-model:opened="store.opened"
-            active-color="light-blue-darken-1"
         >
             <v-list-group
                 v-if="item.subItems && item.subItems.length != 0"
