@@ -1,8 +1,8 @@
 <template>
     <Main title="Novo Projeto">
-        <v-row no-gutters align="center" class="h-100">
-            <v-col align-self="center">
-                <v-form ref="form">
+        <v-row no-gutters justify="center" align="center" class="h-100">
+            <v-col>
+                <v-form ref="form" @submit.prevent>
                     <div>
                         <v-text-field
                             variant="outlined"
@@ -13,7 +13,7 @@
                         ></v-text-field>
                     </div>
                     <div class="d-flex flex-row-reverse mt-2">
-                        <v-btn variant="outlined" @click="validate">
+                        <v-btn variant="outlined" @click="save">
                             Próximo
                         </v-btn>
                     </div>
@@ -46,13 +46,14 @@ export default {
         };
     },
     methods: {
-        async validate() {
+        async save() {
             const { valid } = await this.$refs.form.validate();
 
-            if (valid) alert('Form is valid');
+            if (!valid) {
+                return;
+            }
 
-            // this.$refs.form.reset();
-            // this.$refs.form.resetValidation();
+            await this.store.create();
         },
     },
 };

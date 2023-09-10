@@ -1,17 +1,18 @@
 import { defineStore } from 'pinia';
-import { projectController } from '@/api/controller/projectController';
+import { projectController } from '@/api/controllers/projectController';
 
 export const useCreateProjectStore = defineStore('createProject', {
     state: () => ({
         project: {
+            _id: null,
             name: '',
+            createdAt: null,
+            updatedAt: null,
         },
     }),
     actions: {
-        createProject() {
-            projectController.create({
-                name: this.name,
-            });
+        async create() {
+            this.project = await projectController.create(this.project);
         },
     },
 });
