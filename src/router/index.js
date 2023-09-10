@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useMainStore } from '@/store';
 
 import Home from '../views/Home.vue';
-import CreateProject from '../views/CreateProject.vue';
-import ListProject from '../views/ListProject.vue';
+import CreateProject from '../views/project/CreateProject.vue';
+import ListProject from '../views/project/ListProject';
 import About from '../views/About.vue';
 import Help from '../views/Help.vue';
 
