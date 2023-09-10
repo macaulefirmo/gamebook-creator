@@ -13,6 +13,10 @@ export const useCreateProjectStore = defineStore('createProject', {
     actions: {
         async create() {
             this.project = await projectController.create(this.project);
+
+            console.log(this.project);
+
+            this.$reset();
         },
     },
 });

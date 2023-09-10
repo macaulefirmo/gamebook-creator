@@ -54,6 +54,8 @@ export default {
             }
 
             await this.store.create();
+
+            this.$refs.form.resetValidation();
         },
     },
 };

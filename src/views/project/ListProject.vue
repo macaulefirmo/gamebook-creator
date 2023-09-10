@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in store.projects">
+                        <tr v-for="(item, index) in store.projects">
                             <td
                                 class="b-solid-1"
                                 :class="header.class"
@@ -25,7 +25,7 @@
                                         icon="mdi-trash-can-outline"
                                         color="error"
                                         variant="text"
-                                        @click="this.delete(item['_id'])"
+                                        @click="showModal(index)"
                                     ></v-btn>
                                 </div>
                                 <div v-else>
@@ -37,29 +37,45 @@
                 </v-table>
             </v-card>
         </v-row>
+
+        <Teleport to="body">
+            <modal
+                :show="store.showModal"
+                @close="store.showModal = false"
+                @confirm="handleDelete()"
+            >
+                <template #header> Deletar Projeto </template>
+                <template #body>
+                    Tem certeza que desaja deletar o projeto
+                    <b>{{ store.getSelectedProject().name }}</b
+                    >?
+                </template>
+            </modal>
+        </Teleport>
     </Main>
 </template>
 
 <script>
 import { useListProjectStore } from '@/store/project/listProject';
 import Main from '@/components/Main.vue';
+import Modal from '@/components/Modal.vue';
 
 export default {
     name: 'ListProject',
     components: {
         Main,
+        Modal,
     },
     setup() {
         const store = useListProjectStore();
 
         return {
             store,
-            dialog: false,
             headers: [
                 { title: 'Nome', key: 'name', class: 'w-auto' },
                 { title: 'Criado Em', key: 'createdAt', class: 'w-200p' },
                 { title: 'Editado Em', key: 'updatedAt', class: 'w-200p' },
-                { title: 'Ações', key: 'actions', class: 'w-200p' },
+                { title: 'Ações', key: 'actions', class: 'w-100p' },
             ],
         };
     },
@@ -67,8 +83,13 @@ export default {
         this.store.find();
     },
     methods: {
-        delete(id) {
-            console.log(`DELETE ${id}`);
+        showModal(index) {
+            this.store.selected = index;
+            this.store.showModal = true;
+        },
+        async handleDelete() {
+            this.store.showModal = false;
+            await this.store.delete();
         },
     },
 };
@@ -80,5 +101,8 @@ export default {
 }
 .w-200p {
     width: 200px;
+}
+.w-100p {
+    width: 100px;
 }
 </style>

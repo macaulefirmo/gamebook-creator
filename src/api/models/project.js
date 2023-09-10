@@ -30,9 +30,26 @@ export const project = {
         });
     },
 
-    delete(criteria) {
+    async update(criteria, data) {
         return new Promise((resolve, reject) => {
-            db.remove(criteria, { multi: true }, (err, qtdDeleted) => {
+            db.update(
+                criteria,
+                { $set: dbHelper.performUpdate(data) },
+                { multi: true },
+                (error, qdtUpdated) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(qdtUpdated);
+                    }
+                },
+            );
+        });
+    },
+
+    async delete(id) {
+        return new Promise((resolve, reject) => {
+            db.remove({ _id: id }, { multi: true }, (err, qtdDeleted) => {
                 if (err) {
                     reject(err);
                 } else {
