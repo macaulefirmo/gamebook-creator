@@ -14,7 +14,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in store.projects">
+                        <tr
+                            v-if="store.projects.length != 0"
+                            v-for="(item, index) in store.projects"
+                        >
                             <td
                                 class="b-solid-1"
                                 :class="header.class"
@@ -32,6 +35,9 @@
                                     {{ item[header.key] }}
                                 </div>
                             </td>
+                        </tr>
+                        <tr v-else>
+                            <td colspan="4">Não há projetos cadastrados</td>
                         </tr>
                     </tbody>
                 </v-table>
