@@ -22,7 +22,7 @@
         "sqlite3": "^5.1.6",
         "vue": "^3.2.13",
         "vue-router": "^4.2.4",
-        "vuetify": "^3.0.0-beta.0",
+        "vuetify": "^3.3.16",
         "webfontloader": "^1.0.0"
     },
     "devDependencies": {
