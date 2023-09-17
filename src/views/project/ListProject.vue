@@ -23,7 +23,16 @@
                                 :class="header.class"
                                 v-for="header in headers"
                             >
-                                <div v-if="header.key == 'actions'">
+                                <div
+                                    class="d-flex flex-row justify-center"
+                                    v-if="header.key == 'actions'"
+                                >
+                                    <v-btn
+                                        icon="mdi-pencil"
+                                        color="blue-darken-2"
+                                        variant="text"
+                                        @click="toUpdate(index)"
+                                    ></v-btn>
                                     <v-btn
                                         icon="mdi-trash-can-outline"
                                         color="error"
@@ -78,7 +87,7 @@ export default {
         return {
             store,
             headers: [
-                { title: 'Nome', key: 'name', class: 'w-auto' },
+                { title: 'Nome do Jogo', key: 'name', class: 'w-auto' },
                 { title: 'Criado Em', key: 'createdAt', class: 'w-200p' },
                 { title: 'Editado Em', key: 'updatedAt', class: 'w-200p' },
                 { title: 'Ações', key: 'actions', class: 'w-100p' },
@@ -96,6 +105,11 @@ export default {
         async handleDelete() {
             this.store.showModal = false;
             await this.store.delete();
+        },
+        toUpdate(index) {
+            this.store.selected = index;
+            let project = this.store.getSelectedProject();
+            this.$router.push({ path: `/project/update/${project._id}` });
         },
     },
 };

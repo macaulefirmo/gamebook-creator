@@ -1,6 +1,6 @@
 <template>
     <Main title="Novo Projeto">
-        <v-row no-gutters justify="center" align="center" class="h-100">
+        <v-row no-gutters justify="center" class="h-100">
             <v-col>
                 <v-form ref="form" @submit.prevent>
                     <div>
@@ -13,8 +13,8 @@
                         ></v-text-field>
                     </div>
                     <div class="d-flex flex-row-reverse mt-2">
-                        <v-btn variant="outlined" @click="save">
-                            Próximo
+                        <v-btn variant="outlined" @click="save()">
+                            Criar
                         </v-btn>
                     </div>
                 </v-form>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { useCreateProjectStore } from '@/store';
+import { useCreateProjectStore } from '@/store/project/createProject';
 import Main from '@/components/Main.vue';
 
 export default {
@@ -53,9 +53,14 @@ export default {
                 return;
             }
 
+            this.$refs.form.resetValidation();
             await this.store.create();
 
-            this.$refs.form.resetValidation();
+            let id = this.store.project._id;
+            this.store.$reset();
+            this.$router.push({
+                path: `/project/update/${id}`,
+            });
         },
     },
 };

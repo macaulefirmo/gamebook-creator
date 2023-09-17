@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { useMainStore } from '@/store';
+import { useMainStore } from '@/store/components/main';
 
 export default {
     props: ['title'],

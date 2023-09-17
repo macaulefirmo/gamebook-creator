@@ -3,20 +3,11 @@ import { projectController } from '@/api/controllers/projectController';
 
 export const useCreateProjectStore = defineStore('createProject', {
     state: () => ({
-        project: {
-            _id: null,
-            name: '',
-            createdAt: null,
-            updatedAt: null,
-        },
+        project: projectController.getSchema(),
     }),
     actions: {
         async create() {
             this.project = await projectController.create(this.project);
-
-            console.log(this.project);
-
-            this.$reset();
         },
     },
 });

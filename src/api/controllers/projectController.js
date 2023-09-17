@@ -1,9 +1,21 @@
 import { project } from '@/api/models/project';
 
 export const projectController = {
+    getSchema() {
+        return project.schema();
+    },
+
     async find() {
         try {
             return await project.find();
+        } catch (error) {
+            console.error('ERROR:', error);
+        }
+    },
+
+    async findOne(id) {
+        try {
+            return await project.findOne(id);
         } catch (error) {
             console.error('ERROR:', error);
         }

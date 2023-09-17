@@ -3,7 +3,7 @@
 ## Requirements
 
 ```
-nodejs v16.x
+nodejs v18.x
 ```
 
 ## Project Setup

@@ -1,9 +1,20 @@
 import { dbHelper } from '@/api/helpers/dbHelper';
+import { stage } from '@/api/models/stage';
 
 const Datastore = require('nedb');
 const db = new Datastore({ filename: 'projects.db', autoload: true });
 
 export const project = {
+    schema() {
+        return {
+            _id: null,
+            name: '',
+            createdAt: null,
+            updatedAt: null,
+            stages: [],
+        };
+    },
+
     async find() {
         return new Promise((resolve, reject) => {
             db.find({})
@@ -18,8 +29,24 @@ export const project = {
         });
     },
 
+    async findOne(id) {
+        return new Promise((resolve, reject) => {
+            db.findOne({ _id: id }).exec((error, finded) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(dbHelper.performFindOne(finded));
+                }
+            });
+        });
+    },
+
     async create(data) {
         return new Promise((resolve, reject) => {
+            if (data.stages.length == 0) {
+                data.stages.push(stage.schema());
+            }
+
             db.insert(dbHelper.performInsert(data), (error, inserted) => {
                 if (error) {
                     reject(error);

@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useMainStore } from '@/store';
+import { useMainStore } from '@/store/components/main';
 
 import Home from '../views/Home.vue';
-import CreateProject from '../views/project/CreateProject.vue';
-import ListProject from '../views/project/ListProject';
 import About from '../views/About.vue';
 import Help from '../views/Help.vue';
+
+import CreateProject from '../views/project/CreateProject.vue';
+import ListProject from '../views/project/ListProject';
+import UpdateProject from '../views/project/UpdateProject';
 
 const routes = [
     {
@@ -26,6 +28,11 @@ const routes = [
                 path: '/project/list',
                 name: 'ListProject',
                 component: ListProject,
+            },
+            {
+                path: '/project/update/:id',
+                name: 'UpdateProject',
+                component: UpdateProject,
             },
         ],
     },

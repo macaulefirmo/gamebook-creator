@@ -34,11 +34,7 @@ export default {
         Main,
     },
     data: () => ({}),
-    methods: {
-        teste() {
-            console.log('Teste');
-        },
-    },
+    methods: {},
 };
 </script>
 

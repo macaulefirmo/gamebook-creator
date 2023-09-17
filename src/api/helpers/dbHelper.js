@@ -5,16 +5,20 @@ const BR_FORMAT = 'DD/MM/YYYY HH:mm:SS';
 export const dbHelper = {
     performFind(data) {
         return data.map((item) => {
-            if ('createdAt' in item && item.createdAt) {
-                item.createdAt = moment(item.createdAt).format(BR_FORMAT);
-            }
-
-            if ('updatedAt' in item && item.updatedAt) {
-                item.updatedAt = moment(item.updatedAt).format(BR_FORMAT);
-            }
-
-            return item;
+            return this.performFindOne(item);
         });
+    },
+
+    performFindOne(item) {
+        if ('createdAt' in item && item.createdAt) {
+            item.createdAt = moment(item.createdAt).format(BR_FORMAT);
+        }
+
+        if ('updatedAt' in item && item.updatedAt) {
+            item.updatedAt = moment(item.updatedAt).format(BR_FORMAT);
+        }
+
+        return item;
     },
 
     performInsert(data) {
