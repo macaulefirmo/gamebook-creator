@@ -10,6 +10,8 @@ export const useUpdateProjectStore = defineStore('updateProject', {
         currentStageIndex: '',
         currentStage: {},
         dialogDelete: false,
+        dialogGoBack: false,
+        currentPage: 1,
     }),
     actions: {
         async load(id) {
@@ -29,9 +31,11 @@ export const useUpdateProjectStore = defineStore('updateProject', {
             this.stagesList = list;
         },
         selectFirstStage() {
+            this.currentPage = 1;
             this.selectedStage = this.stagesList[0];
         },
         selectLastStage() {
+            this.currentPage = this.project.stages.length;
             this.selectedStage =
                 this.stagesList[this.project.stages.length - 1];
         },
@@ -51,6 +55,7 @@ export const useUpdateProjectStore = defineStore('updateProject', {
                     ) &&
                     this.selectedStage.value != this.currentStageIndex
                 ) {
+                    this.currentPage = this.selectedStage.value + 1;
                     this.currentStageIndex = this.selectedStage.value;
                     this.currentStage =
                         this.project.stages[this.selectedStage.value];
@@ -68,6 +73,14 @@ export const useUpdateProjectStore = defineStore('updateProject', {
             this.project.stages.splice(this.currentStageIndex, 1);
             this.updateSelectList();
             this.selectPreviousStage();
+        },
+        async save() {
+            await projectController.update(this.project);
+        },
+        changePage() {
+            if (this.currentPage - 1 != this.currentStageIndex) {
+                this.selectedStage = this.stagesList[this.currentPage - 1];
+            }
         },
     },
 });

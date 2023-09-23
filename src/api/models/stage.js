@@ -10,7 +10,7 @@ export const stage = {
             text: null,
             question: null,
             alternatives: [],
-            responseId: null,
+            responseIndex: 0,
         };
     },
 };

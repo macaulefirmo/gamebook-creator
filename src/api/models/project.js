@@ -57,10 +57,10 @@ export const project = {
         });
     },
 
-    async update(criteria, data) {
+    async update(data) {
         return new Promise((resolve, reject) => {
             db.update(
-                criteria,
+                { _id: data._id },
                 { $set: dbHelper.performUpdate(data) },
                 { multi: true },
                 (error, qdtUpdated) => {

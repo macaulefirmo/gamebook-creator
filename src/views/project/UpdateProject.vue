@@ -3,6 +3,7 @@
         <v-row no-gutters justify="center" class="h-100">
             <v-col>
                 <v-combobox
+                    class="mb-7"
                     hide-details
                     variant="outlined"
                     label="Selecione a Fase"
@@ -11,7 +12,6 @@
                     v-model="store.selectedStage"
                 >
                 </v-combobox>
-                <v-divider class="mt-5 mb-5"></v-divider>
                 <div
                     v-for="(item, index) in store.project.stages"
                     :key="item.id"
@@ -23,15 +23,24 @@
                     </div>
                     <stage :stage="item"></stage>
                 </div>
-                <v-divider class="mb-8"></v-divider>
+
+                <v-pagination
+                    :length="store.project.stages.length"
+                    v-model="store.currentPage"
+                    :total-visible="5"
+                    :update:modelValue="store.changePage()"
+                ></v-pagination>
+
+                <v-divider class="mt-6 mb-8"></v-divider>
+
                 <div class="d-flex justify-end">
                     <v-btn
                         variant="outlined"
                         class="mr-3"
                         prepend-icon="mdi-arrow-left-circle"
-                        @click="goBack()"
+                        @click="store.dialogGoBack = true"
                     >
-                        Voltar
+                        Sair
                     </v-btn>
                     <v-btn
                         variant="outlined"
@@ -56,6 +65,7 @@
                         variant="outlined"
                         class="mr-3"
                         prepend-icon="mdi-content-save"
+                        @click="store.save()"
                         color="success"
                     >
                         Salvar Projeto
@@ -88,6 +98,18 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog v-model="store.dialogGoBack" width="auto">
+            <v-card title="Salvar o Projeto?">
+                <v-card-text>
+                    As alterações não salvas serão perdidas
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                    <v-btn variant="outline" @click="goBack(false)">Sair</v-btn>
+                    <v-btn color="success" @click="goBack(true)">Salvar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </Main>
 </template>
 
@@ -112,7 +134,13 @@ export default {
         await this.store.load(this.$route.params.id);
     },
     methods: {
-        goBack() {
+        async goBack(save) {
+            this.store.dialogGoBack = false;
+
+            if (save) {
+                await this.store.save();
+            }
+
             this.store.$reset();
             this.$router.push({ path: '/project/list' });
         },

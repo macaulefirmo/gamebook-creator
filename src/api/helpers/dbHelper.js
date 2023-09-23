@@ -10,6 +10,10 @@ export const dbHelper = {
     },
 
     performFindOne(item) {
+        if (!item) {
+            return item;
+        }
+
         if ('createdAt' in item && item.createdAt) {
             item.createdAt = moment(item.createdAt).format(BR_FORMAT);
         }
@@ -22,6 +26,10 @@ export const dbHelper = {
     },
 
     performInsert(data) {
+        if (!data) {
+            return data;
+        }
+
         if ('_id' in data) {
             delete data._id;
         }
@@ -38,6 +46,10 @@ export const dbHelper = {
     },
 
     performUpdate(data) {
+        if (!data) {
+            return data;
+        }
+
         if ('updatedAt' in data) {
             data.updatedAt = moment().toDate();
         }
