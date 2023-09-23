@@ -20,7 +20,7 @@ export const useUpdateProjectStore = defineStore('updateProject', {
         async load(id) {
             this.project = await projectController.findOne(id);
             this.updateSelectList();
-            this.selectLastStage();
+            this.selectFirstStage();
         },
         updateSelectList() {
             let list = [];

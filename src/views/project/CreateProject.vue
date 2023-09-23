@@ -6,7 +6,7 @@
                     <div>
                         <v-text-field
                             variant="outlined"
-                            label="Qual será o nome do seu jogo?"
+                            label="Qual Será o Nome do Seu Jogo?"
                             v-model="store.project.name"
                             :rules="nameRules"
                             required

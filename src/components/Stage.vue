@@ -49,7 +49,7 @@
                             <v-text-field
                                 class="w-75"
                                 variant="outlined"
-                                :label="`Alternativa ${index}`"
+                                :label="`Alternativa ${index + 1}`"
                                 v-model="stage.alternatives[index]"
                                 hide-details
                             ></v-text-field>

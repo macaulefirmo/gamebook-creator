@@ -72,7 +72,7 @@
                     </v-btn>
                     <v-btn
                         variant="outlined"
-                        prepend-icon="mdi-check-outline"
+                        prepend-icon="mdi-book-check-outline"
                         color="primary"
                         @click="finish()"
                     >

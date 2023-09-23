@@ -29,12 +29,12 @@
                                 >
                                     <v-btn
                                         icon="mdi-pencil"
-                                        color="blue-darken-2"
+                                        color="info"
                                         variant="text"
                                         @click="toUpdate(index)"
                                     ></v-btn>
                                     <v-btn
-                                        icon="mdi-book-play"
+                                        icon="mdi-book-check-outline"
                                         color="primary"
                                         variant="text"
                                         @click="toFinish(index)"
