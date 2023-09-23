@@ -53,33 +53,36 @@
             </v-card>
         </v-row>
 
-        <Teleport to="body">
-            <modal
-                :show="store.showModal"
-                @close="store.showModal = false"
-                @confirm="handleDelete()"
-            >
-                <template #header> Deletar Projeto </template>
-                <template #body>
+        <v-dialog v-model="store.showModal" width="auto">
+            <v-card title="Deletar Projeto">
+                <v-card-text>
                     Tem certeza que desaja deletar o projeto
-                    <b>{{ store.getSelectedProject().name }}</b
+                    <b>{{ getProjectName() }}</b
                     >?
-                </template>
-            </modal>
-        </Teleport>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                    <v-btn variant="outline" @click="store.showModal = false"
+                        >Cancelar</v-btn
+                    >
+                    <v-btn color="error" @click="handleDelete()">Deletar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <VSonner position="top-right" duration="3000" expand="true"></VSonner>
     </Main>
 </template>
 
 <script>
 import { useListProjectStore } from '@/store/project/listProject';
 import Main from '@/components/Main.vue';
-import Modal from '@/components/Modal.vue';
+import { VSonner, toast } from 'vuetify-sonner';
 
 export default {
     name: 'ListProject',
     components: {
         Main,
-        Modal,
+        VSonner,
     },
     setup() {
         const store = useListProjectStore();
@@ -105,11 +108,21 @@ export default {
         async handleDelete() {
             this.store.showModal = false;
             await this.store.delete();
+            toast('Projeto deletado!', {
+                cardProps: {
+                    color: 'success',
+                    width: '350',
+                },
+            });
         },
         toUpdate(index) {
             this.store.selected = index;
             let project = this.store.getSelectedProject();
             this.$router.push({ path: `/project/update/${project._id}` });
+        },
+        getProjectName() {
+            let project = this.store.getSelectedProject();
+            return project ? project.name : '';
         },
     },
 };

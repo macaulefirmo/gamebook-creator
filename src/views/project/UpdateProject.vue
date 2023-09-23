@@ -65,7 +65,7 @@
                         variant="outlined"
                         class="mr-3"
                         prepend-icon="mdi-content-save"
-                        @click="store.save()"
+                        @click="save()"
                         color="success"
                     >
                         Salvar Projeto
@@ -110,6 +110,8 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <VSonner position="top-right" duration="3000" expand="true"></VSonner>
     </Main>
 </template>
 
@@ -117,11 +119,13 @@
 import { useUpdateProjectStore } from '@/store/project/updateProject';
 import Main from '@/components/Main.vue';
 import Stage from '@/components/Stage.vue';
+import { VSonner, toast } from 'vuetify-sonner';
 
 export default {
     components: {
         Main,
         Stage,
+        VSonner,
     },
     setup() {
         const store = useUpdateProjectStore();
@@ -147,6 +151,15 @@ export default {
         deleteCurrentStage() {
             this.store.dialogDelete = false;
             this.store.deleteStage();
+        },
+        async save() {
+            await this.store.save();
+            toast('Projeto salvo!', {
+                cardProps: {
+                    color: 'success',
+                    width: '350',
+                },
+            });
         },
     },
 };
