@@ -110,9 +110,8 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
-        <VSonner position="top-right" duration="3000" expand="true"></VSonner>
     </Main>
+    <VSonner position="top-right" duration="3000" expand="true"></VSonner>
 </template>
 
 <script>
@@ -139,14 +138,18 @@ export default {
     },
     methods: {
         async goBack(save) {
+            this.isGoBack = true;
             this.store.dialogGoBack = false;
 
             if (save) {
                 await this.store.save();
             }
 
-            this.store.$reset();
-            this.$router.push({ path: '/project/list' });
+            this.$router.push({
+                path: this.store.isLeaveRoute
+                    ? this.store.leaveRoute
+                    : '/project/list',
+            });
         },
         deleteCurrentStage() {
             this.store.dialogDelete = false;
@@ -161,6 +164,17 @@ export default {
                 },
             });
         },
+    },
+    beforeRouteLeave(to, from) {
+        if (this.isGoBack) {
+            this.store.$reset();
+            return true;
+        }
+
+        this.store.leaveRoute = to.fullPath;
+        this.store.isLeaveRoute = true;
+        this.store.dialogGoBack = true;
+        return false;
     },
 };
 </script>

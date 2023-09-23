@@ -12,6 +12,9 @@ export const useUpdateProjectStore = defineStore('updateProject', {
         dialogDelete: false,
         dialogGoBack: false,
         currentPage: 1,
+        isGoBack: false,
+        isLeaveRoute: false,
+        leaveRoute: '',
     }),
     actions: {
         async load(id) {
