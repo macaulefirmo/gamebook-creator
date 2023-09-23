@@ -8,6 +8,7 @@ import Help from '../views/Help.vue';
 import CreateProject from '../views/project/CreateProject.vue';
 import ListProject from '../views/project/ListProject';
 import UpdateProject from '../views/project/UpdateProject';
+import FinishProject from '../views/project/FinishProject';
 
 const routes = [
     {
@@ -33,6 +34,11 @@ const routes = [
                 path: '/project/update/:id',
                 name: 'UpdateProject',
                 component: UpdateProject,
+            },
+            {
+                path: '/project/finish/:id',
+                name: 'FinishProject',
+                component: FinishProject,
             },
         ],
     },

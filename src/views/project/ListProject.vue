@@ -34,6 +34,12 @@
                                         @click="toUpdate(index)"
                                     ></v-btn>
                                     <v-btn
+                                        icon="mdi-book-play"
+                                        color="primary"
+                                        variant="text"
+                                        @click="toFinish(index)"
+                                    ></v-btn>
+                                    <v-btn
                                         icon="mdi-trash-can-outline"
                                         color="error"
                                         variant="text"
@@ -119,6 +125,11 @@ export default {
             this.store.selected = index;
             let project = this.store.getSelectedProject();
             this.$router.push({ path: `/project/update/${project._id}` });
+        },
+        toFinish(index) {
+            this.store.selected = index;
+            let project = this.store.getSelectedProject();
+            this.$router.push({ path: `/project/finish/${project._id}` });
         },
         getProjectName() {
             let project = this.store.getSelectedProject();

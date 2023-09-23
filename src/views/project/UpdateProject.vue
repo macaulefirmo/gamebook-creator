@@ -74,6 +74,7 @@
                         variant="outlined"
                         prepend-icon="mdi-check-outline"
                         color="primary"
+                        @click="finish()"
                     >
                         Finalizar
                     </v-btn>
@@ -162,6 +163,11 @@ export default {
                     color: 'success',
                     width: '350',
                 },
+            });
+        },
+        finish() {
+            this.$router.push({
+                path: `/project/finish/${this.store.project._id}`,
             });
         },
     },
