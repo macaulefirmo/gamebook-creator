@@ -1,14 +1,10 @@
 import { dbHelper } from '@/api/helpers/dbHelper';
 import { stage } from '@/api/models/stage';
 
-// import { readFile } from 'fs/promises';
+const fs = window.require('fs');
 
 const Datastore = require('nedb');
 const db = new Datastore({ filename: 'projects.db', autoload: true });
-
-const fs = require('fs');
-
-// const fs = require('fs-extra');
 
 export const project = {
     schema() {
@@ -93,47 +89,46 @@ export const project = {
     },
 
     async build(data) {
-        await this.test();
-        // let stages = [
-        //     {
-        //         id: 0,
-        //         type: 'start',
-        //         image: null,
-        //         title: data.name,
-        //         active: true,
-        //     },
-        // ];
+        let stages = [
+            {
+                id: 0,
+                type: 'start',
+                image: null,
+                title: data.name,
+                active: true,
+            },
+        ];
 
-        // data.stages.forEach((stage, index) => {
-        //     if (stage.type == 'reading') {
-        //         stages.push({
-        //             id: index + 1,
-        //             type: 'reading',
-        //             image: null,
-        //             text: stage.text,
-        //             active: false,
-        //         });
-        //         return;
-        //     }
+        data.stages.forEach((stage, index) => {
+            if (stage.type == 'reading') {
+                stages.push({
+                    id: index + 1,
+                    type: 'reading',
+                    image: null,
+                    text: stage.text,
+                    active: false,
+                });
+                return;
+            }
 
-        //     stages.push({
-        //         id: index + 1,
-        //         type: 'question',
-        //         question: stage.question,
-        //         alternatives: stage.alternatives,
-        //         responseIndex: stage.responseIndex,
-        //         active: false,
-        //     });
-        // });
+            stages.push({
+                id: index + 1,
+                type: 'question',
+                question: stage.question,
+                alternatives: stage.alternatives,
+                responseIndex: stage.responseIndex,
+                active: false,
+            });
+        });
 
-        // stages.push({
-        //     id: data.stages.length + 1,
-        //     type: 'end',
-        //     active: false,
-        // });
+        stages.push({
+            id: data.stages.length + 1,
+            type: 'end',
+            active: false,
+        });
+
+        await this.test(stages);
     },
 
-    async test() {
-       
-    },
+    async test(data) {},
 };
