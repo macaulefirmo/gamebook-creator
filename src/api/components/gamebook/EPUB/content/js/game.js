@@ -45,7 +45,7 @@ var system = {
 var elements = {
     startButton: {
         id: generateUUID(),
-        x: SCREEN_W / 2 - 130 / 2,
+        x: SCREEN_W / 2 - 65,
         y: SCREEN_H / 2 + 50,
         w: 130,
         h: 55,
@@ -67,8 +67,8 @@ var elements = {
     },
     restartButton: {
         id: generateUUID(),
-        x: SCREEN_W / 2 - 130 / 2,
-        y: SCREEN_H / 2 + 50,
+        x: SCREEN_W / 2 - 65,
+        y: SCREEN_H / 2 + 150,
         w: 130,
         h: 55,
         r: 20,
@@ -149,6 +149,11 @@ var events = [
     },
 ];
 
+var memory = {
+    total: 0,
+    correct: 0,
+};
+
 function update() {
     system.mouse.update();
     handleEvents();
@@ -224,15 +229,77 @@ function drawStart(stage) {
 }
 
 function drawEnd(stage) {
+    const heightBase = 240;
+    const multiplier = 35;
+
     textout_centre(
         canvas,
         FONT_NAME,
-        'END',
+        'FIM DE JOGO!',
         SCREEN_W / 2,
-        SCREEN_H / 2 - 75,
-        28,
+        180,
+        32,
         makecol(0, 0, 0),
     );
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        'Total de Perguntas',
+        SCREEN_W / 2,
+        heightBase + multiplier * 2,
+        20,
+        makecol(0, 0, 0),
+    );
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        memory.total,
+        SCREEN_W / 2,
+        heightBase + multiplier * 3,
+        18,
+        makecol(0, 0, 0),
+    );
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        'Acertos',
+        SCREEN_W / 2,
+        heightBase + multiplier * 4 + 5,
+        20,
+        makecol(0, 0, 0),
+    );
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        memory.correct,
+        SCREEN_W / 2,
+        heightBase + multiplier * 5,
+        18,
+        makecol(0, 0, 0),
+    );
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        'Taxa de Acerto',
+        SCREEN_W / 2,
+        heightBase + multiplier * 6 + 5,
+        20,
+        makecol(0, 0, 0),
+    );
+
+    let percent = !memory.correct
+        ? 0
+        : ((memory.correct / memory.total) * 100).toFixed(2);
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        `${percent}%`,
+        SCREEN_W / 2,
+        heightBase + multiplier * 7,
+        18,
+        makecol(0, 0, 0),
+    );
+
     drawButton(elements.restartButton);
 }
 
@@ -417,23 +484,19 @@ function handleSelectAlternatives(element, stage) {
             elements[name].isActive = false;
 
             if (elements[name].id == element.id) {
+                memory.total++;
+                if (stage.responseIndex == i) {
+                    memory.correct++;
+                }
+
                 elements[name].isSelected = true;
                 continue;
             }
-
-            elements[name].isSelected = false;
         }
     }
 
-    for (let i in stages) {
-        let current = stages[i];
-
-        if (current.id == stage.id) {
-            elements.prevButton.isActive = false;
-            elements.nextButton.isActive = true;
-            break;
-        }
-    }
+    elements.prevButton.isActive = false;
+    elements.nextButton.isActive = true;
 }
 
 function restart() {
@@ -450,6 +513,11 @@ function restart() {
             }
         }
     }
+
+    memory = {
+        total: 0,
+        correct: 0,
+    };
 
     stages[stages.length - 1].isActive = false;
     stages[0].isActive = true;
