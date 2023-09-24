@@ -6,14 +6,30 @@ export const useFinishProjectStore = defineStore('finishProject', {
         project: projectController.getSchema(),
         running: false,
         errors: [],
+        builded: false,
+        gamePaths: null,
     }),
     actions: {
         async load(id) {
             this.project = await projectController.findOne(id);
+
+            this.gamePaths = projectController.getPaths(this.project.name);
+            if (this.gamePaths) {
+                this.builded = true;
+            }
         },
         async build() {
-            console.log('Iniciando o build...');
-            await projectController.build(this.project);
+            this.builded = false;
+            this.gamePaths = await projectController.build(this.project);
+            if (this.gamePaths) {
+                this.builded = true;
+            }
+        },
+        preview() {
+            projectController.openFile(this.gamePaths.preview);
+        },
+        showFile() {
+            projectController.showFile(this.gamePaths.dist);
         },
     },
 });

@@ -123,36 +123,6 @@ var events = [
     },
 ];
 
-var stages = [
-    {
-        id: 0,
-        type: 'start',
-        image: null,
-        title: 'New Game X',
-        isActive: true,
-    },
-    {
-        id: 1,
-        type: 'reading',
-        image: null,
-        text: "What is Lorem Ipsum?\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\nWhere does it come from?\nContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in class.\n\n\nWhere does it come from?\nContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in class.",
-        isActive: false,
-    },
-    {
-        id: 2,
-        type: 'question',
-        question: 'Quais são as cores?',
-        alternatives: ['Azul', 'Vermelho', 'Amarelo'],
-        responseIndex: 0,
-        isActive: false,
-    },
-    {
-        id: 3,
-        type: 'end',
-        isActive: false,
-    },
-];
-
 function update() {
     system.mouse.update();
     handleEvents();

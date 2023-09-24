@@ -1,5 +1,7 @@
 import { project } from '@/api/models/project';
 
+const { shell } = window.require('electron');
+
 export const projectController = {
     getSchema() {
         return project.schema();
@@ -47,9 +49,21 @@ export const projectController = {
 
     async build(data) {
         try {
-            await project.build(data);
+            return await project.build(data);
         } catch (error) {
             console.error('ERROR:', error);
         }
+    },
+
+    getPaths(projectName) {
+        return project.getGamePaths(projectName);
+    },
+
+    openFile(filePath) {
+        shell.openExternal(`file://${filePath}`);
+    },
+
+    showFile(filePath) {
+        shell.showItemInFolder(filePath);
     },
 };

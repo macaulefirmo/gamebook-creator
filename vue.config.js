@@ -12,6 +12,7 @@ module.exports = defineConfig({
             fallback: {
                 fs: false,
                 os: false,
+                child_process: false,
                 path: require.resolve('path-browserify'),
             },
         },

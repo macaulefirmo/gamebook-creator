@@ -36,6 +36,28 @@
                     >
                         Editar Projeto
                     </v-btn>
+                    <v-btn
+                        variant="outlined"
+                        class="mr-3"
+                        prepend-icon="mdi-file-eye-outline"
+                        color="success"
+                        :disabled="!store.builded"
+                        v-show="store.errors.length == 0"
+                        @click="store.preview()"
+                    >
+                        Visualizar
+                    </v-btn>
+                    <v-btn
+                        variant="outlined"
+                        class="mr-3"
+                        prepend-icon="mdi-open-in-new"
+                        color="info"
+                        :disabled="!store.builded"
+                        v-show="store.errors.length == 0"
+                        @click="store.showFile()"
+                    >
+                        Abrir
+                    </v-btn>
                 </div>
                 <div class="mt-5" v-if="store.errors.length > 0">
                     <div class="mb-3">
@@ -74,17 +96,21 @@
                 </div>
             </v-col>
         </v-row>
+
+        <VSonner position="top-right" duration="3000" expand="true"></VSonner>
     </Main>
 </template>
 
 <script>
 import { useFinishProjectStore } from '@/store/project/finishProject';
 import Main from '@/components/Main.vue';
+import { VSonner, toast } from 'vuetify-sonner';
 
 export default {
     name: 'FinishProject',
     components: {
         Main,
+        VSonner,
     },
     setup() {
         const store = useFinishProjectStore();
@@ -97,7 +123,7 @@ export default {
         await this.store.load(this.$route.params.id);
     },
     methods: {
-        run() {
+        async run() {
             this.store.running = true;
             this.validate();
             if (this.store.errors.length > 0) {
@@ -105,7 +131,13 @@ export default {
                 return;
             }
 
-            this.store.build();
+            await this.store.build();
+            toast('Jogo criado!', {
+                cardProps: {
+                    color: 'success',
+                    width: '350',
+                },
+            });
             this.store.running = false;
         },
         validate() {

@@ -23,7 +23,8 @@
         <item id="game-css" href="content/css/game.css" media-type="text/css"/>
         <item id="allegro-js" href="content/js/allegrojs/allegro.min.js" media-type="text/javascript"/>
         <item id="utils-js" href="content/js/utils.js" media-type="text/javascript"/>
-        <item id="game-js" href="content/js/game.js" media-type="text/javascript"/>        
+        <item id="game-js" href="content/js/game.js" media-type="text/javascript"/>
+        <item id="data-js" href="content/js/data.js" media-type="text/javascript"/>
 
         <!-- ncx included for 2.0 reading system compatibility:    -->
         <item id="ncx" href="nav.ncx" media-type="application/x-dtbncx+xml" />

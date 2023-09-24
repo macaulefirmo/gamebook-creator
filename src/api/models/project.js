@@ -1,7 +1,8 @@
 import { dbHelper } from '@/api/helpers/dbHelper';
+import { stringHelper } from '@/api/helpers/stringHelper';
+import { fileHelper } from '@/api/helpers/fileHelper';
+import { commandHelper } from '@/api/helpers/commandHelper';
 import { stage } from '@/api/models/stage';
-
-const fs = window.require('fs');
 
 const Datastore = require('nedb');
 const db = new Datastore({ filename: 'projects.db', autoload: true });
@@ -88,64 +89,47 @@ export const project = {
         });
     },
 
-    async build(data) {
-        let stages = [
-            {
-                id: 0,
-                type: 'start',
-                image: null,
-                title: data.name,
-                isActive: true,
-            },
-        ];
+    async build(project) {
+        const stages = stage.createStages(project);
+        const gamePath = this.getGamePath(project.name);
 
-        data.stages.forEach((stage, index) => {
-            if (stage.type == 'reading') {
-                stages.push({
-                    id: index + 1,
-                    type: 'reading',
-                    image: null,
-                    text: stage.text,
-                    isActive: false,
-                });
-                return;
-            }
+        fileHelper.deleteFolderRecursive(gamePath);
+        fileHelper.copyFolderRecursive('src/api/components/gamebook', gamePath);
 
-            stages.push({
-                id: index + 1,
-                type: 'question',
-                question: stage.question,
-                alternatives: stage.alternatives,
-                responseIndex: stage.responseIndex,
-                isActive: false,
-            });
-        });
+        const jsonData = JSON.stringify(stages);
+        fileHelper.writeFile(
+            `${gamePath}/EPUB/content/js/data.js`,
+            `var stages = ${jsonData};`,
+        );
 
-        stages.push({
-            id: data.stages.length + 1,
-            type: 'end',
-            isActive: false,
-        });
+        await commandHelper.run(
+            `java -jar src/api/components/epubcheck/epubcheck.jar ${gamePath} -mode exp -save`,
+        );
 
-        await this.test(stages);
+        return this.getGamePaths(project.name);
     },
 
-    async test(data) {
-        const jsonData = JSON.stringify(data, null, 2);
+    getGamePath(projectName) {
+        const gameFolder = stringHelper.toCamelCase(projectName);
+        return `tmp/${gameFolder}`;
+    },
 
-        const dir = 'tmp';
-        const file = `${dir}/dados.json`;
+    getPreviewPath(projectName) {
+        let gamePath = this.getGamePath(projectName);
+        return fileHelper.getFilePath(
+            `${gamePath}/EPUB/content/html/game.xhtml`,
+        );
+    },
 
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
-        }
+    getDistFilePath(projectName) {
+        const gameName = stringHelper.toCamelCase(projectName);
+        return fileHelper.getFilePath(`tmp/${gameName}.epub`);
+    },
 
-        fs.writeFile(file, jsonData, 'utf8', (err) => {
-            if (err) {
-                console.error('Erro ao salvar o arquivo JSON:', err);
-            } else {
-                console.log('Arquivo JSON foi salvo com sucesso:', file);
-            }
-        });
+    getGamePaths(projectName) {
+        return {
+            dist: this.getDistFilePath(projectName),
+            preview: this.getPreviewPath(projectName),
+        };
     },
 };
