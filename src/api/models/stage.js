@@ -43,7 +43,6 @@ export const stage = {
                 text: stage.question,
                 alternatives: stage.alternatives,
                 responseIndex: stage.responseIndex,
-                answered: false,
                 isActive: false,
             });
         });

@@ -61,7 +61,29 @@ var elements = {
         },
         isActive: true,
         callback: function () {
+            elements.startButton.isActive = false;
             nextStage();
+        },
+    },
+    restartButton: {
+        id: generateUUID(),
+        x: SCREEN_W / 2 - 130 / 2,
+        y: SCREEN_H / 2 + 50,
+        w: 130,
+        h: 55,
+        r: 20,
+        b: 2,
+        colorFill: '#42A5F5',
+        colorBorder: '#42A5F5',
+        content: {
+            text: 'REINICIAR',
+            color: 'white',
+            fontSize: 18,
+            fontName: FONT_NAME,
+        },
+        isActive: true,
+        callback: function () {
+            restart();
         },
     },
     prevButton: {
@@ -112,6 +134,10 @@ var events = [
     {
         name: ON_CLICK,
         idElement: elements.startButton.id,
+    },
+    {
+        name: ON_CLICK,
+        idElement: elements.restartButton.id,
     },
     {
         name: ON_CLICK,
@@ -207,6 +233,7 @@ function drawEnd(stage) {
         28,
         makecol(0, 0, 0),
     );
+    drawButton(elements.restartButton);
 }
 
 function drawReading(stage) {
@@ -219,8 +246,14 @@ function drawReading(stage) {
         16,
         FONT_NAME,
     );
-    drawButton(elements.prevButton);
-    drawButton(elements.nextButton);
+
+    if (elements.prevButton.isActive) {
+        drawButton(elements.prevButton);
+    }
+
+    if (elements.nextButton.isActive) {
+        drawButton(elements.nextButton);
+    }
 }
 
 function drawQuestion(stage) {
@@ -247,10 +280,12 @@ function drawQuestion(stage) {
         }
     }
 
-    if (stage.answered) {
-        drawButton(elements.nextButton);
-    } else {
+    if (elements.prevButton.isActive) {
         drawButton(elements.prevButton);
+    }
+
+    if (elements.nextButton.isActive) {
+        drawButton(elements.nextButton);
     }
 }
 
@@ -271,9 +306,6 @@ function prevStage() {
                 }
             }
 
-            if (stage.type == 'question') {
-                disableAlternatives(stage);
-            }
             stages[i].isActive = false;
             break;
         }
@@ -313,7 +345,7 @@ function nextStage() {
 
                 if (next.id == nextId) {
                     stages[j].isActive = true;
-                    handleNextStage(next);
+                    handleNextStage(next, stage.type == 'question');
                     break;
                 }
             }
@@ -324,21 +356,20 @@ function nextStage() {
     }
 }
 
-function handleNextStage(nextStage) {
-    elements.startButton.isActive = false;
-
+function handleNextStage(nextStage, lastIsQuestion) {
     if (nextStage.type == 'end') {
         elements.prevButton.isActive = false;
         elements.nextButton.isActive = false;
+        elements.restartButton.isActive = true;
     }
 
     if (nextStage.type == 'reading') {
-        elements.prevButton.isActive = true;
+        elements.prevButton.isActive = !lastIsQuestion;
         elements.nextButton.isActive = true;
     }
 
     if (nextStage.type == 'question') {
-        elements.prevButton.isActive = true;
+        elements.prevButton.isActive = !lastIsQuestion;
         elements.nextButton.isActive = false;
         enableAlternatives(nextStage);
     }
@@ -379,14 +410,12 @@ function enableAlternatives(stage) {
 }
 
 function handleSelectAlternatives(element, stage) {
-    if (stage.answered) {
-        return;
-    }
-
     for (let i = 0; i < stage.alternatives.length; i++) {
         let name = `stage-${stage.id}-alternative-${i}`;
 
         if (elements.hasOwnProperty(name)) {
+            elements[name].isActive = false;
+
             if (elements[name].id == element.id) {
                 elements[name].isSelected = true;
                 continue;
@@ -400,7 +429,6 @@ function handleSelectAlternatives(element, stage) {
         let current = stages[i];
 
         if (current.id == stage.id) {
-            stages[i].answered = true;
             elements.prevButton.isActive = false;
             elements.nextButton.isActive = true;
             break;
@@ -408,22 +436,30 @@ function handleSelectAlternatives(element, stage) {
     }
 }
 
-function disableAlternatives(stage) {
-    for (let i = 0; i < stage.alternatives.length; i++) {
-        let name = `stage-${stage.id}-alternative-${i}`;
+function restart() {
+    for (let i in stages) {
+        let stage = stages[i];
 
-        if (elements.hasOwnProperty(name)) {
-            elements[name].isActive = false;
+        if (stage.type == 'question') {
+            for (let j = 0; j < stage.alternatives.length; j++) {
+                let name = `stage-${stage.id}-alternative-${j}`;
+
+                if (elements.hasOwnProperty(name)) {
+                    elements[name].isSelected = false;
+                }
+            }
         }
     }
-}
 
-function initGame() {}
+    stages[stages.length - 1].isActive = false;
+    stages[0].isActive = true;
+
+    elements.restartButton.isActive = false;
+    elements.startButton.isActive = true;
+}
 
 function main() {
     allegro_init_all('game_canvas', SCREEN_W, SCREEN_H);
-
-    initGame();
 
     ready(function () {
         loop(function () {
