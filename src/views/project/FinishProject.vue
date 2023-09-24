@@ -105,6 +105,7 @@ export default {
                 return;
             }
 
+            this.store.build();
             this.store.running = false;
         },
         validate() {

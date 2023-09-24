@@ -44,4 +44,12 @@ export const projectController = {
             console.error('ERROR:', error);
         }
     },
+
+    async build(data) {
+        try {
+            await project.build(data);
+        } catch (error) {
+            console.error('ERROR:', error);
+        }
+    },
 };

@@ -10,6 +10,8 @@ module.exports = defineConfig({
     configureWebpack: {
         resolve: {
             fallback: {
+                fs: false,
+                os: false,
                 path: require.resolve('path-browserify'),
             },
         },
