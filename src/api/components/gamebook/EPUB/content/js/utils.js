@@ -59,15 +59,14 @@ function drawCenteredTextWithLineBreaks(
     fontSize,
     fontName,
 ) {
-    const maxWidth = canvasWidth - boder; // Largura máxima do texto
-    const lineHeight = fontSize * 1.5; // Espaço entre as linhas
+    const maxWidth = canvasWidth - boder;
+    const lineHeight = fontSize * 1.5;
 
     ctx.font = `${fontSize}px ${fontName}`;
     ctx.fillStyle = 'black';
     ctx.textAlign = 'center';
 
     const lines = text.split('\n');
-
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
 
@@ -92,4 +91,44 @@ function drawCenteredTextWithLineBreaks(
         ctx.fillText(currentLine, x, y);
         y += lineHeight;
     }
+}
+
+function drawAlternative(canvas, alternative) {
+    let ctx = canvas.context;
+
+    ctx.font = `${alternative.fontSize}px ${alternative.fontName}`;
+    ctx.textAlign = 'left';
+
+    ctx.lineWidth = alternative.b;
+    ctx.strokeStyle = alternative.color;
+    ctx.strokeRect(alternative.x, alternative.y, alternative.w, alternative.h);
+
+    ctx.fillText(
+        alternative.text,
+        alternative.x + alternative.w + 15,
+        alternative.y + alternative.h / 2,
+    );
+}
+
+function drawSelectedAlternative(canvas, alternative) {
+    let ctx = canvas.context;
+
+    ctx.font = `${alternative.fontSize}px ${alternative.fontName}`;
+    ctx.textAlign = 'left';
+
+    ctx.fillStyle = alternative.isCorrect ? 'green' : 'red';
+    ctx.fillRect(alternative.x, alternative.y, alternative.w, alternative.h);
+
+    ctx.strokeStyle = alternative.color;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(alternative.x, alternative.y, alternative.w, alternative.h);
+
+    ctx.fillStyle = alternative.isCorrect ? 'green' : 'red';
+    ctx.fillText(
+        alternative.text,
+        alternative.x + alternative.w + 15,
+        alternative.y + alternative.h / 2,
+    );
+
+    ctx.fillStyle = 'black';
 }

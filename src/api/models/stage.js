@@ -40,9 +40,10 @@ export const stage = {
             stages.push({
                 id: index + 1,
                 type: 'question',
-                question: stage.question,
+                text: stage.question,
                 alternatives: stage.alternatives,
                 responseIndex: stage.responseIndex,
+                answered: false,
                 isActive: false,
             });
         });

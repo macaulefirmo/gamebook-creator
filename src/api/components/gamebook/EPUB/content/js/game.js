@@ -139,7 +139,7 @@ function handleEvents() {
 
         if (event.name == ON_CLICK && system.mouse.isElementClicked(element)) {
             system.mouse.handleClick();
-            element.callback();
+            element.callback(element);
         }
     }
 }
@@ -224,18 +224,34 @@ function drawReading(stage) {
 }
 
 function drawQuestion(stage) {
-    textout_centre(
-        canvas,
+    drawCenteredTextWithLineBreaks(
+        canvas.context,
+        stage.text,
+        SCREEN_W,
+        75,
+        75,
+        18,
         FONT_NAME,
-        'QUESTION',
-        SCREEN_W / 2,
-        SCREEN_H / 2 - 75,
-        28,
-        makecol(0, 0, 0),
     );
 
-    drawButton(elements.prevButton);
-    drawButton(elements.nextButton);
+    for (let i = 0; i < stage.alternatives.length; i++) {
+        let element = elements[`stage-${stage.id}-alternative-${i}`];
+
+        if (element) {
+            if (element.isSelected) {
+                drawSelectedAlternative(canvas, element);
+                continue;
+            }
+
+            drawAlternative(canvas, element);
+        }
+    }
+
+    if (stage.answered) {
+        drawButton(elements.nextButton);
+    } else {
+        drawButton(elements.prevButton);
+    }
 }
 
 function prevStage() {
@@ -255,6 +271,9 @@ function prevStage() {
                 }
             }
 
+            if (stage.type == 'question') {
+                disableAlternatives(stage);
+            }
             stages[i].isActive = false;
             break;
         }
@@ -309,6 +328,8 @@ function handleNextStage(nextStage) {
     elements.startButton.isActive = false;
 
     if (nextStage.type == 'end') {
+        elements.prevButton.isActive = false;
+        elements.nextButton.isActive = false;
     }
 
     if (nextStage.type == 'reading') {
@@ -318,7 +339,82 @@ function handleNextStage(nextStage) {
 
     if (nextStage.type == 'question') {
         elements.prevButton.isActive = true;
-        elements.nextButton.isActive = true;
+        elements.nextButton.isActive = false;
+        enableAlternatives(nextStage);
+    }
+}
+
+function enableAlternatives(stage) {
+    for (let i = 0; i < stage.alternatives.length; i++) {
+        let name = `stage-${stage.id}-alternative-${i}`;
+
+        if (!elements.hasOwnProperty(name)) {
+            elements[name] = {
+                id: generateUUID(),
+                x: 50,
+                y: SCREEN_H / 2 + i * 45,
+                w: 20,
+                h: 20,
+                b: 1,
+                text: stage.alternatives[i],
+                color: 'black',
+                fontSize: 16,
+                fontName: FONT_NAME,
+                isActive: true,
+                isCorrect: stage.responseIndex == i,
+                isSelected: false,
+                callback: function (element) {
+                    handleSelectAlternatives(element, stage);
+                },
+            };
+            events.push({
+                name: ON_CLICK,
+                idElement: elements[name].id,
+            });
+            continue;
+        }
+
+        elements[name].isActive = true;
+    }
+}
+
+function handleSelectAlternatives(element, stage) {
+    if (stage.answered) {
+        return;
+    }
+
+    for (let i = 0; i < stage.alternatives.length; i++) {
+        let name = `stage-${stage.id}-alternative-${i}`;
+
+        if (elements.hasOwnProperty(name)) {
+            if (elements[name].id == element.id) {
+                elements[name].isSelected = true;
+                continue;
+            }
+
+            elements[name].isSelected = false;
+        }
+    }
+
+    for (let i in stages) {
+        let current = stages[i];
+
+        if (current.id == stage.id) {
+            stages[i].answered = true;
+            elements.prevButton.isActive = false;
+            elements.nextButton.isActive = true;
+            break;
+        }
+    }
+}
+
+function disableAlternatives(stage) {
+    for (let i = 0; i < stage.alternatives.length; i++) {
+        let name = `stage-${stage.id}-alternative-${i}`;
+
+        if (elements.hasOwnProperty(name)) {
+            elements[name].isActive = false;
+        }
     }
 }
 

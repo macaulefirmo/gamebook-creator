@@ -13,6 +13,7 @@
                 <div class="ml-3">Pergunta</div>
             </div>
             <div v-if="!isQuestion">
+                <!-- Máximo de 1400 caracteres -->
                 <v-textarea
                     counter
                     rows="18"
@@ -23,6 +24,7 @@
                 ></v-textarea>
             </div>
             <div v-else>
+                <!-- Máximo de 550 caracteres -->
                 <v-textarea
                     counter
                     rows="5"
@@ -46,6 +48,7 @@
                             class="d-flex flex-row align-center mb-5"
                             v-for="(item, index) in stage.alternatives"
                         >
+                            <!-- Máximo de 150 caracteres -->
                             <v-text-field
                                 class="w-75"
                                 variant="outlined"

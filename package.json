@@ -9,7 +9,8 @@
         "electron:build": "vue-cli-service electron:build",
         "electron:serve": "vue-cli-service electron:serve",
         "postinstall": "electron-builder install-app-deps",
-        "postuninstall": "electron-builder install-app-deps"
+        "postuninstall": "electron-builder install-app-deps",
+        "game:dev": "node -e \"require('open')('src/api/components/gamebook/EPUB/content/html/game.xhtml')\""
     },
     "main": "background.js",
     "dependencies": {
