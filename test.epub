@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jhove xmlns="http://schema.openpreservation.org/ois/xml/ns/jhove"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        date="2023-07-07"
+        name="epubcheck"
+        release="5.1.0"
+        xsi:schemaLocation="http://schema.openpreservation.org/ois/xml/ns/jhove https://schema.openpreservation.org/ois/xml/xsd/jhove/jhove.xsd">
+   <date>2023-09-24T13:38:30-03:00</date>
+   <repInfo uri="/home/macaule/Documentos/Dev/gamebook-creator/src/api/components/gamebook.epub">
+      <lastModified>2023-09-23T10:24:00Z</lastModified>
+      <format>application/epub+zip</format>
+      <version>3.3</version>
+      <status>Well-formed</status>
+      <mimeType>application/epub+zip</mimeType>
+      <properties>
+         <property>
+            <name>FileName</name>
+            <values arity="Scalar" type="String">
+               <value>gamebook.epub</value>
+            </values>
+         </property>
+         <property>
+            <name>CharacterCount</name>
+            <values arity="Scalar" type="Long">
+               <value>160</value>
+            </values>
+         </property>
+         <property>
+            <name>Language</name>
+            <values arity="Scalar" type="String">
+               <value>pt-BR</value>
+            </values>
+         </property>
+         <property>
+            <name>Info</name>
+            <values arity="List" type="Property">
+               <property>
+                  <name>Identifier</name>
+                  <values arity="Scalar" type="String">
+                     <value>code.package.org</value>
+                  </values>
+               </property>
+               <property>
+                  <name>ModDate</name>
+                  <values arity="Scalar" type="Date">
+                     <value>2023-09-23T10:24:00Z</value>
+                  </values>
+               </property>
+               <property>
+                  <name>Title</name>
+                  <values arity="Scalar" type="String">
+                     <value>GAME_NAME_1</value>
+                  </values>
+               </property>
+               <property>
+                  <name>Creator</name>
+                  <values arity="Scalar" type="String">
+                     <value>CREATOR</value>
+                  </values>
+               </property>
+               <property>
+                  <name>Date</name>
+                  <values arity="Scalar" type="String">
+                     <value>2023-09-23</value>
+                  </values>
+               </property>
+               <property>
+                  <name>Rights</name>
+                  <values arity="Scalar" type="String">
+                     <value>This work is shared with the public using the Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) license.</value>
+                  </values>
+               </property>
+            </values>
+         </property>
+         <property>
+            <name>References</name>
+            <values arity="List" type="Property">
+               <property>
+                  <name>Reference</name>
+                  <values arity="Scalar" type="String">
+                     <value>http://creativecommons.org/licenses/by-sa/3.0/</value>
+                  </values>
+               </property>
+            </values>
+         </property>
+         <property>
+            <name>MediaTypes</name>
+            <values arity="Array" type="String">
+               <value>application/xhtml+xml</value>
+               <value>image/png</value>
+               <value>text/css</value>
+               <value>text/javascript</value>
+               <value>application/x-dtbncx+xml</value>
+            </values>
+         </property>
+         <property>
+            <name>hasScripts</name>
+            <values arity="Scalar" type="Boolean">
+               <value>true</value>
+            </values>
+         </property>
+      </properties>
+   </repInfo>
+</jhove>

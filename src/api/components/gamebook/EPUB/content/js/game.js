@@ -3,19 +3,125 @@ SCREEN_H = 800;
 
 const FPS = 30;
 const FONT_NAME = 'Roboto';
-
 const ON_CLICK = 'onClick';
 
 var system = {
     mouse: {
         x: -1,
         y: -1,
-        pressed: 0,
-        released: 0,
+        pressed: false,
+        released: false,
+        hasPressed: false,
+        update: function () {
+            system.mouse.x = mouse_x;
+            system.mouse.y = mouse_y;
+            system.mouse.pressed = mouse_pressed;
+            system.mouse.released = mouse_released;
+        },
+        handleClick: function () {
+            system.mouse.hasPressed = true;
+            setTimeout(() => {
+                system.mouse.hasPressed = false;
+            }, 50);
+        },
+        isElementHovered(element) {
+            return (
+                system.mouse.x >= element.x &&
+                system.mouse.x <= element.x + element.w &&
+                system.mouse.y >= element.y &&
+                system.mouse.y <= element.y + element.h
+            );
+        },
+        isElementClicked(element) {
+            return (
+                system.mouse.isElementHovered(element) &&
+                system.mouse.pressed &&
+                !system.mouse.hasPressed
+            );
+        },
     },
 };
 
-var events = [];
+var elements = {
+    startButton: {
+        id: generateUUID(),
+        x: SCREEN_W / 2 - 130 / 2,
+        y: SCREEN_H / 2 + 50,
+        w: 130,
+        h: 55,
+        r: 20,
+        b: 2,
+        colorFill: '#42A5F5',
+        colorBorder: '#42A5F5',
+        content: {
+            text: 'INICIAR',
+            color: 'white',
+            fontSize: 18,
+            fontName: FONT_NAME,
+        },
+        isActive: true,
+        callback: function () {
+            nextStage();
+        },
+    },
+    prevButton: {
+        id: generateUUID(),
+        x: SCREEN_W - 250,
+        y: SCREEN_H - 90,
+        w: 100,
+        h: 45,
+        r: 20,
+        b: 2,
+        colorFill: '#757575',
+        colorBorder: '#757575',
+        content: {
+            text: 'Voltar',
+            color: 'white',
+            fontSize: 16,
+            fontName: FONT_NAME,
+        },
+        isActive: false,
+        callback: function () {
+            prevStage();
+        },
+    },
+    nextButton: {
+        id: generateUUID(),
+        x: SCREEN_W - 130,
+        y: SCREEN_H - 90,
+        w: 100,
+        h: 45,
+        r: 20,
+        b: 2,
+        colorFill: '#42A5F5',
+        colorBorder: '#42A5F5',
+        content: {
+            text: 'AVANÇAR',
+            color: 'white',
+            fontSize: 16,
+            fontName: FONT_NAME,
+        },
+        isActive: false,
+        callback: function () {
+            nextStage();
+        },
+    },
+};
+
+var events = [
+    {
+        name: ON_CLICK,
+        idElement: elements.startButton.id,
+    },
+    {
+        name: ON_CLICK,
+        idElement: elements.prevButton.id,
+    },
+    {
+        name: ON_CLICK,
+        idElement: elements.nextButton.id,
+    },
+];
 
 var stages = [
     {
@@ -23,14 +129,14 @@ var stages = [
         type: 'start',
         image: null,
         title: 'New Game X',
-        active: true,
+        isActive: true,
     },
     {
         id: 1,
         type: 'reading',
         image: null,
-        text: 'Color and Icon:\n\nThe type property acts as a shorthand for a color and icon combination, you can use both props individually to achieve the same effect. The following example produces the same result as using type=“success” by defining a custom color and using the icon lookup table to get the globally defined success icon.',
-        active: false,
+        text: "What is Lorem Ipsum?\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\nWhere does it come from?\nContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in class.\n\n\nWhere does it come from?\nContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in class.",
+        isActive: false,
     },
     {
         id: 2,
@@ -38,67 +144,65 @@ var stages = [
         question: 'Quais são as cores?',
         alternatives: ['Azul', 'Vermelho', 'Amarelo'],
         responseIndex: 0,
-        active: false,
+        isActive: false,
     },
     {
         id: 3,
         type: 'end',
-        active: false,
+        isActive: false,
     },
 ];
 
 function update() {
-    handleMouse();
+    system.mouse.update();
     handleEvents();
 }
 
-function handleMouse() {
-    system.mouse = {
-        x: mouse_x,
-        y: mouse_y,
-        pressed: mouse_pressed,
-        released: mouse_released,
-    };
-}
-
 function handleEvents() {
-    for (var i in events) {
-        var event = events[i];
+    for (let i in events) {
+        let event = events[i];
 
-        if (event.name == ON_CLICK && isClicked(event.element)) {
+        let element = getElementById(event.idElement);
+        if (!element || !element.isActive) {
+            continue;
+        }
+
+        if (event.name == ON_CLICK && system.mouse.isElementClicked(element)) {
+            system.mouse.handleClick();
+            element.callback();
         }
     }
 }
 
-function isClicked(element) {
-    return isHovered(element) && system.mouse.released;
-}
+function getElementById(id) {
+    for (let i in elements) {
+        let element = elements[i];
 
-function isHovered(element) {
-    return (
-        system.mouse.x >= element.x &&
-        system.mouse.x <= element.x + element.w &&
-        system.mouse.y >= element.y &&
-        system.mouse.y <= element.y + element.h
-    );
+        if (element.id == id) {
+            return element;
+        }
+    }
+
+    return null;
 }
 
 function draw() {
-    for (var i in stages) {
-        var stage = stages[i];
-        if (stage.active) {
+    for (let i in stages) {
+        let stage = stages[i];
+
+        if (stage.isActive) {
             if (stage.type == 'start') {
                 drawStart(stage);
                 break;
             }
 
             if (stage.type == 'end') {
-                drawReading(stage);
+                drawEnd(stage);
                 break;
             }
 
             if (stage.type == 'reading') {
-                drawEnd(stage);
+                drawReading(stage);
                 break;
             }
 
@@ -120,84 +224,140 @@ function drawStart(stage) {
         28,
         makecol(0, 0, 0),
     );
-
-    let width = 130;
-    button = {
-        x: SCREEN_W / 2 - width / 2,
-        y: SCREEN_H / 2 + 50,
-        w: width,
-        h: 55,
-        r: 20,
-        b: 2,
-        colorFill: '#42A5F5',
-        colorBorder: '#42A5F5',
-        content: {
-            text: 'INICIAR',
-            fontSize: 18,
-            color: 'white',
-        },
-    };
-    drawButton(button);
-
-    events.push({
-        name: ON_CLICK,
-        element: button,
-    });
+    drawButton(elements.startButton);
 }
 
-function drawEnd(stage) {}
-
-function drawReading(stage) {}
-
-function drawQuestion(stage) {}
-
-function drawButton(button) {
-    roundRect(
-        canvas.context,
-        button.x,
-        button.y,
-        button.w,
-        button.h,
-        button.r,
-        button.b,
-        button.colorFill,
-        button.colorBorder,
-        button.content,
+function drawEnd(stage) {
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        'END',
+        SCREEN_W / 2,
+        SCREEN_H / 2 - 75,
+        28,
+        makecol(0, 0, 0),
     );
 }
 
-function roundRect(ctx, x, y, w, h, r, b, fillStyle, strokeStyle, content) {
-    ctx.fillStyle = fillStyle;
-    ctx.strokeStyle = strokeStyle;
-    ctx.lineWidth = b;
-
-    ctx.beginPath();
-
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.arcTo(x + w, y, x + w, y + r, r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
-    ctx.lineTo(x + r, y + h);
-    ctx.arcTo(x, y + h, x, y + h - r, r);
-    ctx.lineTo(x, y + r);
-    ctx.arcTo(x, y, x + r, y, r);
-
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.font = `${content.fontSize}px ${FONT_NAME}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    ctx.fillStyle = content.color;
-    ctx.fillText(content.text, x + w / 2, y + h / 2);
-
-    ctx.closePath();
+function drawReading(stage) {
+    drawCenteredTextWithLineBreaks(
+        canvas.context,
+        stage.text,
+        SCREEN_W,
+        75,
+        75,
+        16,
+        FONT_NAME,
+    );
+    drawButton(elements.prevButton);
+    drawButton(elements.nextButton);
 }
+
+function drawQuestion(stage) {
+    textout_centre(
+        canvas,
+        FONT_NAME,
+        'QUESTION',
+        SCREEN_W / 2,
+        SCREEN_H / 2 - 75,
+        28,
+        makecol(0, 0, 0),
+    );
+
+    drawButton(elements.prevButton);
+    drawButton(elements.nextButton);
+}
+
+function prevStage() {
+    for (let i in stages) {
+        let stage = stages[i];
+
+        if (stage.isActive) {
+            let prevId = stage.id - 1;
+
+            for (let j in stages) {
+                let prev = stages[j];
+
+                if (prev.id == prevId) {
+                    stages[j].isActive = true;
+                    handlePrevStage(prev);
+                    break;
+                }
+            }
+
+            stages[i].isActive = false;
+            break;
+        }
+    }
+}
+
+function handlePrevStage(prevStage) {
+    if (prevStage.type == 'start') {
+        elements.prevButton.isActive = false;
+        elements.nextButton.isActive = false;
+        elements.startButton.isActive = true;
+        return;
+    }
+
+    if (prevStage.type == 'reading') {
+        elements.prevButton.isActive = true;
+        elements.nextButton.isActive = true;
+        elements.startButton.isActive = false;
+    }
+
+    if (prevStage.type == 'question') {
+        elements.prevButton.isActive = true;
+        elements.nextButton.isActive = true;
+        elements.startButton.isActive = false;
+    }
+}
+
+function nextStage() {
+    for (let i in stages) {
+        let stage = stages[i];
+
+        if (stage.isActive) {
+            let nextId = stage.id + 1;
+
+            for (let j in stages) {
+                let next = stages[j];
+
+                if (next.id == nextId) {
+                    stages[j].isActive = true;
+                    handleNextStage(next);
+                    break;
+                }
+            }
+
+            stages[i].isActive = false;
+            break;
+        }
+    }
+}
+
+function handleNextStage(nextStage) {
+    elements.startButton.isActive = false;
+
+    if (nextStage.type == 'end') {
+    }
+
+    if (nextStage.type == 'reading') {
+        elements.prevButton.isActive = true;
+        elements.nextButton.isActive = true;
+    }
+
+    if (nextStage.type == 'question') {
+        elements.prevButton.isActive = true;
+        elements.nextButton.isActive = true;
+    }
+}
+
+function initGame() {}
 
 function main() {
     allegro_init_all('game_canvas', SCREEN_W, SCREEN_H);
+
+    initGame();
 
     ready(function () {
         loop(function () {

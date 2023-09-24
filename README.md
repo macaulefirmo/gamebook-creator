@@ -24,6 +24,14 @@ npm run electron:serve
 npm run electron:build
 ```
 
+## Test
+
+### Create EPUB File
+
+```
+java -jar src/api/components/epubcheck/epubcheck.jar src/api/components/gamebook -mode exp -save
+```
+
 ## References
 
 ### Vuetify

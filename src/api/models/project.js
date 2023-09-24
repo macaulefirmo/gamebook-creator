@@ -95,7 +95,7 @@ export const project = {
                 type: 'start',
                 image: null,
                 title: data.name,
-                active: true,
+                isActive: true,
             },
         ];
 
@@ -106,7 +106,7 @@ export const project = {
                     type: 'reading',
                     image: null,
                     text: stage.text,
-                    active: false,
+                    isActive: false,
                 });
                 return;
             }
@@ -117,18 +117,35 @@ export const project = {
                 question: stage.question,
                 alternatives: stage.alternatives,
                 responseIndex: stage.responseIndex,
-                active: false,
+                isActive: false,
             });
         });
 
         stages.push({
             id: data.stages.length + 1,
             type: 'end',
-            active: false,
+            isActive: false,
         });
 
         await this.test(stages);
     },
 
-    async test(data) {},
+    async test(data) {
+        const jsonData = JSON.stringify(data, null, 2);
+
+        const dir = 'tmp';
+        const file = `${dir}/dados.json`;
+
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+
+        fs.writeFile(file, jsonData, 'utf8', (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo JSON:', err);
+            } else {
+                console.log('Arquivo JSON foi salvo com sucesso:', file);
+            }
+        });
+    },
 };
