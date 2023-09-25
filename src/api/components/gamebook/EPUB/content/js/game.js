@@ -1,5 +1,5 @@
-SCREEN_W = 600;
-SCREEN_H = 800;
+SCREEN_W = window.innerWidth > 600 ? 600 : window.innerWidth;
+SCREEN_H = window.innerHeight > 800 ? 800 : window.innerHeight;
 
 const FPS = 30;
 const FONT_NAME = 'Roboto';
