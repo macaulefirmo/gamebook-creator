@@ -149,6 +149,13 @@ var events = [
     },
 ];
 
+var sounds = {
+    success: loadSound('../sounds/success.mp3'),
+    error: loadSound('../sounds/error.mp3'),
+    defeat: loadSound('../sounds/defeat.mp3'),
+    victory: loadSound('../sounds/victory.mp3'),
+};
+
 var memory = {
     total: 0,
     correct: 0,
@@ -425,6 +432,12 @@ function nextStage() {
 
 function handleNextStage(nextStage, lastIsQuestion) {
     if (nextStage.type == 'end') {
+        if (memory.correct == 0) {
+            sounds.defeat.play();
+        } else {
+            sounds.victory.play();
+        }
+
         elements.prevButton.isActive = false;
         elements.nextButton.isActive = false;
         elements.restartButton.isActive = true;
@@ -486,7 +499,10 @@ function handleSelectAlternatives(element, stage) {
             if (elements[name].id == element.id) {
                 memory.total++;
                 if (stage.responseIndex == i) {
+                    sounds.success.play();
                     memory.correct++;
+                } else {
+                    sounds.error.play();
                 }
 
                 elements[name].isSelected = true;

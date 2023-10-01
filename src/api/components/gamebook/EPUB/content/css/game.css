@@ -1,3 +1,26 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+#debug {
+    text-align: left;
+    width: 620px;
+    height: 460px;
+    border: 1px solid #888;
+    font: 16px monospace;
+    overflow: auto;
+    background-color: #f8fcff;
+    box-shadow: #888 0px 0px 32px;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+@media only screen and (min-width: 768px) {
+    canvas {
+        box-shadow: #888 0px 0px 32px;
+        margin: 10px auto;
+        display: block;
+        border-radius: 12px;
+    }
+}

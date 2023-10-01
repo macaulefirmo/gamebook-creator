@@ -132,3 +132,11 @@ function drawSelectedAlternative(canvas, alternative) {
 
     ctx.fillStyle = 'black';
 }
+
+function loadSound(filePath) {
+    let sound = document.createElement('audio');
+
+    sound.src = filePath;
+    sound.controls = true;
+    return sound;
+}

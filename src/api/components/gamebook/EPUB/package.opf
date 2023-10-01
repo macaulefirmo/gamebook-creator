@@ -19,6 +19,10 @@
     <manifest>
         <item id="nav" 	href="nav.xhtml" properties="nav" media-type="application/xhtml+xml" />
         <item id="cover" href="content/images/cover.png" media-type="image/png" properties="cover-image" />
+        <item id="success-audio" href="content/sounds/success.mp3" media-type="audio/mpeg"/>
+        <item id="error-audio" href="content/sounds/error.mp3" media-type="audio/mpeg"/>
+        <item id="victory-audio" href="content/sounds/victory.mp3" media-type="audio/mpeg"/>
+        <item id="defeat-audio" href="content/sounds/defeat.mp3" media-type="audio/mpeg"/>
         <item id="game"	href="content/html/game.xhtml" media-type="application/xhtml+xml" properties="scripted"/>
         <item id="game-css" href="content/css/game.css" media-type="text/css"/>
         <item id="allegro-js" href="content/js/allegrojs/allegro.min.js" media-type="text/javascript"/>
