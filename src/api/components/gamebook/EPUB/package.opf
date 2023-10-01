@@ -2,10 +2,10 @@
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-US" prefix="cc: http://creativecommons.org/ns#">
     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
         <dc:identifier id="uid">code.package.org</dc:identifier>
-        <dc:title>GAME_NAME_1</dc:title>
-        <dc:creator>CREATOR</dc:creator>
+        <dc:title>[GAME_NAME]</dc:title>
+        <dc:creator>Gamebook Creator</dc:creator>
         <dc:language>pt-BR</dc:language>
-        <dc:date>2023-09-23</dc:date>
+        <dc:date>[DATE]</dc:date>
         <meta property="dcterms:modified">2023-09-23T10:24:00Z</meta>
 
         <!-- rights expressions for the work as a whole -->
@@ -29,6 +29,7 @@
         <item id="utils-js" href="content/js/utils.js" media-type="text/javascript"/>
         <item id="game-js" href="content/js/game.js" media-type="text/javascript"/>
         <item id="data-js" href="content/js/data.js" media-type="text/javascript"/>
+        [MANIFEST_ITEMS]
 
         <!-- ncx included for 2.0 reading system compatibility:    -->
         <item id="ncx" href="nav.ncx" media-type="application/x-dtbncx+xml" />
@@ -37,6 +38,6 @@
         <itemref idref="game"/>
     </spine>
     <guide>
-        <reference type="game" title="GAME_NAME_2" href="content/html/game.xhtml"/>
+        <reference type="application/xhtml+xml" title="GAME_BOOK" href="content/html/game.xhtml"/>
     </guide>
 </package>

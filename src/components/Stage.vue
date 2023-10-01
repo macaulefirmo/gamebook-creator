@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-form ref="formStage" @submit.prevent>
-            <div class="d-flex align-center">
+            <div class="d-flex align-center mb-0">
                 <div class="mr-3">Leitura</div>
                 <div>
                     <v-switch
@@ -13,18 +13,56 @@
                 <div class="ml-3">Pergunta</div>
             </div>
             <div v-if="!isQuestion">
-                <!-- Máximo de 1400 caracteres -->
                 <v-textarea
                     counter
-                    rows="18"
+                    rows="12"
                     row-height="30"
                     variant="outlined"
                     label="Digite o Texto para Leitura"
                     v-model="stage.text"
+                    :maxlength="1000"
                 ></v-textarea>
+                <div>
+                    <div
+                        class="d-flex align-center mb-4"
+                        v-if="stage.image != null"
+                    >
+                        <div>
+                            <v-btn
+                                class="mr-2"
+                                prepend-icon="mdi-image"
+                                variant="outlined"
+                                @click="removeImage()"
+                            >
+                                Remover
+                            </v-btn>
+                        </div>
+                        <div>
+                            {{ getFileName() }}
+                        </div>
+                    </div>
+                    <div v-else>
+                        <v-file-input
+                            class="mt-2"
+                            label="Selecione a Imagem"
+                            variant="outlined"
+                            accept="image/*"
+                            show-size
+                            prepend-icon="mdi-image"
+                            hide-details
+                            v-model="image"
+                            :update:modelValue="changeImage()"
+                        ></v-file-input>
+                        <div class="ml-10 mt-2 mb-4 text-grey">
+                            <div>
+                                Obs: Ao utilizar imagem, não adicione um texto
+                                grande para não haver sobreposição
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div v-else>
-                <!-- Máximo de 550 caracteres -->
                 <v-textarea
                     counter
                     rows="5"
@@ -32,6 +70,7 @@
                     variant="outlined"
                     label="Digite a Pergunta"
                     v-model="stage.question"
+                    :maxlength="500"
                 ></v-textarea>
                 <v-select
                     class="w-300p"
@@ -41,20 +80,19 @@
                     v-model="qtdAlternatives"
                     :update:modelValue="updateQtdAlternatives()"
                 ></v-select>
-
                 <div>
                     <v-radio-group v-model="stage.responseIndex" hide-details>
                         <div
                             class="d-flex flex-row align-center mb-5"
                             v-for="(item, index) in stage.alternatives"
                         >
-                            <!-- Máximo de 150 caracteres -->
                             <v-text-field
                                 class="w-75"
                                 variant="outlined"
                                 :label="`Alternativa ${index + 1}`"
                                 v-model="stage.alternatives[index]"
                                 hide-details
+                                :maxlength="100"
                             ></v-text-field>
                             <v-radio
                                 class="align-self-center"
@@ -74,6 +112,7 @@
 export default {
     props: ['stage'],
     data: () => ({
+        image: [],
         isQuestion: false,
         qtdAlternatives: '',
     }),
@@ -111,6 +150,27 @@ export default {
                 }
             }
         },
+        changeImage() {
+            if (this.image && this.image.length > 0) {
+                this.stage.image = this.image[0];
+            }
+        },
+        getFileName() {
+            if (this.stage.image instanceof File) {
+                return this.stage.image.name;
+            }
+
+            if (!this.stage.image) {
+                return null;
+            }
+
+            let steps = this.stage.image.split('/');
+            return steps[steps.length - 1];
+        },
+        removeImage() {
+            this.stage.image = null;
+            this.image = null;
+        },
     },
 };
 </script>
@@ -118,5 +178,8 @@ export default {
 <style>
 .w-300p {
     width: 300px;
+}
+.text-grey {
+    color: #ddd;
 }
 </style>

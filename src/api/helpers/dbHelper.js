@@ -54,6 +54,7 @@ export const dbHelper = {
             data.updatedAt = moment().toDate();
         }
 
+        delete data.createdAt;
         return data;
     },
 };

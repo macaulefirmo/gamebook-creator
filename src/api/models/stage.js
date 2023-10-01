@@ -1,3 +1,6 @@
+import { fileHelper } from '../helpers/fileHelper';
+import { opfHelper } from '../helpers/opfHelper';
+
 const { v4: uuidv4 } = require('uuid');
 
 export const stage = {
@@ -14,7 +17,7 @@ export const stage = {
         };
     },
 
-    createStages(project) {
+    createStages(project, gamePath) {
         let stages = [
             {
                 id: 0,
@@ -25,27 +28,52 @@ export const stage = {
             },
         ];
 
-        project.stages.forEach((stage, index) => {
+        let tags = [];
+
+        for (let i in project.stages) {
+            let stage = project.stages[i];
+            let newIndex = parseInt(i) + 1;
+
             if (stage.type == 'reading') {
-                stages.push({
-                    id: index + 1,
+                let newStage = {
+                    id: newIndex,
                     type: 'reading',
                     image: null,
                     text: stage.text,
                     isActive: false,
-                });
-                return;
+                };
+
+                if (stage.image) {
+                    let fileName = fileHelper.copyFile(
+                        stage.image,
+                        `stage-${newIndex}`,
+                        `${gamePath}/EPUB/content/images`,
+                        true,
+                    );
+
+                    newStage.image = `../images/${fileName}`;
+                    tags.push({
+                        id: `image-stage-${newIndex}`,
+                        href: `content/images/${fileName}`,
+                        type: fileHelper.getMediaType(fileName),
+                    });
+                }
+
+                stages.push(newStage);
+                continue;
             }
 
             stages.push({
-                id: index + 1,
+                id: newIndex,
                 type: 'question',
                 text: stage.question,
                 alternatives: stage.alternatives,
                 responseIndex: stage.responseIndex,
                 isActive: false,
             });
-        });
+        }
+
+        opfHelper.updateManifest(gamePath, tags);
 
         stages.push({
             id: project.stages.length + 1,

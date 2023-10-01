@@ -140,3 +140,31 @@ function loadSound(filePath) {
     sound.controls = true;
     return sound;
 }
+
+function loadImage(filePath) {
+    var img = new Image();
+    img.src = filePath;
+
+    var cv = document.createElement('canvas');
+    var ctx = cv.getContext('2d');
+
+    var bmp = {
+        canvas: cv,
+        context: ctx,
+        w: -1,
+        h: -1,
+        ready: false,
+        type: 'bmp',
+    };
+
+    img.onload = function () {
+        bmp.canvas.width = img.width;
+        bmp.canvas.height = img.height;
+        bmp.context.drawImage(img, 0, 0);
+        bmp.w = img.width;
+        bmp.h = img.height;
+        bmp.ready = true;
+    };
+
+    return bmp;
+}

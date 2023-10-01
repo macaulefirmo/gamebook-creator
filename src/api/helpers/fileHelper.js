@@ -2,6 +2,10 @@ const fs = window.top.require('fs');
 const path = require('path');
 
 export const fileHelper = {
+    fileExists(filePath) {
+        return fs.existsSync(filePath);
+    },
+
     getFilePath(relativePath) {
         if (!fs.existsSync(relativePath)) {
             return null;
@@ -50,5 +54,30 @@ export const fileHelper = {
 
             fs.unlinkSync(itemPath);
         });
+    },
+
+    copyFile(filePath, newFileName, outputPath, fileNameOnly = false) {
+        if (!fs.existsSync(outputPath)) {
+            fs.mkdirSync(outputPath, { recursive: true });
+        }
+
+        const parts = filePath.split('.');
+        const extension = parts[parts.length - 1];
+        const fileName = `${newFileName}.${extension}`;
+
+        fs.copyFileSync(filePath, `${outputPath}/${fileName}`);
+
+        if (fileNameOnly) {
+            return fileName;
+        }
+
+        return `${outputPath}/${fileName}`;
+    },
+
+    getMediaType(fileName) {
+        const parts = fileName.split('.');
+        const extension = parts[parts.length - 1];
+
+        return `image/${extension}`;
     },
 };

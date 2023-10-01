@@ -156,6 +156,8 @@ var sounds = {
     victory: loadSound('../sounds/victory.mp3'),
 };
 
+var images = [];
+
 var memory = {
     total: 0,
     correct: 0,
@@ -321,6 +323,17 @@ function drawReading(stage) {
         FONT_NAME,
     );
 
+    if (stage.image) {
+        let image = getImage(stage);
+        canvas.context.drawImage(
+            image.canvas,
+            SCREEN_W / 2 - 350 / 2,
+            SCREEN_H / 2 - 100,
+            350,
+            350,
+        );
+    }
+
     if (elements.prevButton.isActive) {
         drawButton(elements.prevButton);
     }
@@ -330,6 +343,24 @@ function drawReading(stage) {
     }
 }
 
+function getImage(stage) {
+    for (let i in images) {
+        let image = images[i];
+
+        if ((image.idStage = stage.id)) {
+            return image.bmp;
+        }
+    }
+
+    let bmp = loadImage(stage.image);
+    images.push({
+        idStage: stage.id,
+        bmp: bmp,
+    });
+
+    return bmp;
+}
+
 function drawQuestion(stage) {
     drawCenteredTextWithLineBreaks(
         canvas.context,
@@ -337,7 +368,7 @@ function drawQuestion(stage) {
         SCREEN_W,
         75,
         75,
-        18,
+        16,
         FONT_NAME,
     );
 

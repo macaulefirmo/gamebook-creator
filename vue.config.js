@@ -14,6 +14,8 @@ module.exports = defineConfig({
                 os: false,
                 child_process: false,
                 path: require.resolve('path-browserify'),
+                timers: require.resolve('timers-browserify'),
+                stream: require.resolve('stream-browserify'),
             },
         },
     },

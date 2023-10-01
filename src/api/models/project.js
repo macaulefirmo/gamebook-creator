@@ -3,6 +3,7 @@ import { stringHelper } from '@/api/helpers/stringHelper';
 import { fileHelper } from '@/api/helpers/fileHelper';
 import { commandHelper } from '@/api/helpers/commandHelper';
 import { stage } from '@/api/models/stage';
+import { opfHelper } from '../helpers/opfHelper';
 
 const Datastore = require('nedb');
 const db = new Datastore({ filename: 'projects.db', autoload: true });
@@ -90,17 +91,20 @@ export const project = {
     },
 
     async build(project) {
-        const stages = stage.createStages(project);
         const gamePath = this.getGamePath(project.name);
 
         fileHelper.deleteFolderRecursive(gamePath);
         fileHelper.copyFolderRecursive('src/api/components/gamebook', gamePath);
+
+        const stages = stage.createStages(project, gamePath);
 
         const jsonData = JSON.stringify(stages);
         fileHelper.writeFile(
             `${gamePath}/EPUB/content/js/data.js`,
             `var stages = ${jsonData};`,
         );
+
+        opfHelper.updateMetadata(gamePath, project.name);
 
         await commandHelper.run(
             `java -jar src/api/components/epubcheck/epubcheck.jar ${gamePath} -mode exp -save`,

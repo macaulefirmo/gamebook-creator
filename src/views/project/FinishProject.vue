@@ -24,15 +24,15 @@
                         :loading="store.running"
                         :disabled="store.errors.length > 0"
                     >
-                        Criar Jogo
+                        Gerar EPUB
                     </v-btn>
                     <v-btn
                         variant="outlined"
                         class="mr-3"
                         prepend-icon="mdi-pencil"
+                        :disabled="store.running"
                         @click="toUpdate()"
                         color="info"
-                        v-show="store.errors.length > 0"
                     >
                         Editar Projeto
                     </v-btn>
@@ -131,13 +131,22 @@ export default {
                 return;
             }
 
-            await this.store.build();
-            toast('Jogo criado!', {
-                cardProps: {
-                    color: 'success',
-                    width: '350',
-                },
-            });
+            if (await this.store.build()) {
+                toast('Executável EPUB gerado com sucesso!', {
+                    cardProps: {
+                        color: 'success',
+                        width: '350',
+                    },
+                });
+            } else {
+                toast('Oops! Ocorreu um erro ao gerar o arquivo', {
+                    cardProps: {
+                        color: 'success',
+                        width: '350',
+                    },
+                });
+            }
+
             this.store.running = false;
         },
         validate() {
