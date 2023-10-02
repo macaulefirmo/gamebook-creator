@@ -23,7 +23,10 @@ export const useFinishProjectStore = defineStore('finishProject', {
             this.gamePaths = await projectController.build(this.project);
             if (this.gamePaths) {
                 this.builded = true;
+                return true;
             }
+
+            return false;
         },
         preview() {
             projectController.openFile(this.gamePaths.preview);

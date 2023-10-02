@@ -141,7 +141,7 @@ export default {
             } else {
                 toast('Oops! Ocorreu um erro ao gerar o arquivo', {
                     cardProps: {
-                        color: 'success',
+                        color: 'error',
                         width: '350',
                     },
                 });

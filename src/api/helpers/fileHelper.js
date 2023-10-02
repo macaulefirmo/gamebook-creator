@@ -2,6 +2,10 @@ const fs = window.top.require('fs');
 const path = require('path');
 
 export const fileHelper = {
+    folderExists(folderPath) {
+        return fs.existsSync(folderPath);
+    },
+
     fileExists(filePath) {
         return fs.existsSync(filePath);
     },

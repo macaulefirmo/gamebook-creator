@@ -131,6 +131,11 @@ export const project = {
     },
 
     getGamePaths(projectName) {
+        const gameName = stringHelper.toCamelCase(projectName);
+        if (!fileHelper.folderExists(`tmp/${gameName}`)) {
+            return null;
+        }
+
         return {
             dist: this.getDistFilePath(projectName),
             preview: this.getPreviewPath(projectName),

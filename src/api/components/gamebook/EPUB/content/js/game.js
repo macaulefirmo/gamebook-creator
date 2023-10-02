@@ -347,7 +347,7 @@ function getImage(stage) {
     for (let i in images) {
         let image = images[i];
 
-        if ((image.idStage = stage.id)) {
+        if (image.idStage == stage.id) {
             return image.bmp;
         }
     }
@@ -494,9 +494,9 @@ function enableAlternatives(stage) {
             elements[name] = {
                 id: generateUUID(),
                 x: 50,
-                y: SCREEN_H / 2 + i * 45,
-                w: 20,
-                h: 20,
+                y: SCREEN_H / 2 + i * 50,
+                w: 35,
+                h: 35,
                 b: 1,
                 text: stage.alternatives[i],
                 color: 'black',

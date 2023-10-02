@@ -74,6 +74,7 @@ export const projectController = {
             return await project.build(data);
         } catch (error) {
             console.error('ERROR:', error);
+            return null;
         }
     },
 
