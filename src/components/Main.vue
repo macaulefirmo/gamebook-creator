@@ -8,8 +8,6 @@
         <v-toolbar-title>{{ title }}</v-toolbar-title>
 
         <v-spacer></v-spacer>
-
-        <v-btn variant="text" icon="mdi-dots-vertical"></v-btn>
     </v-app-bar>
 
     <v-navigation-drawer location="left" :rail="store.rail" permanent>
