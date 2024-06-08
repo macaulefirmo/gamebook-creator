@@ -68,7 +68,7 @@
                         @click="save()"
                         color="success"
                     >
-                        Salvar Projeto
+                        Salvar
                     </v-btn>
                     <v-btn
                         variant="outlined"

@@ -34,7 +34,7 @@
                         @click="toUpdate()"
                         color="info"
                     >
-                        Editar Projeto
+                        Editar
                     </v-btn>
                     <v-btn
                         variant="outlined"
